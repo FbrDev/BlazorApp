@@ -1,0 +1,45 @@
+﻿@using BlazorApp.Models
+
+<h1>@Title</h1>
+<EditForm Model="@Customer" OnValidSubmit="@TriggerOnSave">
+    <DataAnnotationsValidator />
+
+    <div class="form-group">
+        <label for="exampleInputName">Nome</label>
+        <input type="text" @bind-value="Customer.Name" class="form-control" id="exampleInputName" aria-describedby="emailHelp" placeholder="Digite o seu nome">
+        <ValidationMessage For="@(() => Customer.Name)" />
+    </div>
+    <div class="form-group">
+        <label for="exampleInputEmail">Email</label>
+        <input type="email" @bind-value="Customer.Email" class="form-control" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Digite seu email">
+        <ValidationMessage For="@(() => Customer.Email)" />
+    </div>
+    <br />
+    <br />
+    <button class="btn btn-primary" type="submit">Salvar</button>
+    <button @onclick="TriggerOnCancel" class="btn btn-danger">Cancelar</button>
+</EditForm>
+
+@code {
+    [Parameter]
+    public string Title { get; set; }
+
+    [Parameter]
+    public Customer Customer { get; set; }
+
+    [Parameter]
+    public EventCallback Save { get; set; }
+
+    [Parameter]
+    public EventCallback Cancel { get; set; }
+
+    async Task TriggerOnSave()
+    {
+        await Save.InvokeAsync();
+    }
+
+    async Task TriggerOnCancel()
+    {
+        await Cancel.InvokeAsync();
+    }
+}

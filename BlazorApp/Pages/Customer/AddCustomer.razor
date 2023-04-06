@@ -1,0 +1,29 @@
+﻿@page "/customer/addcustomer"
+@inject BlazorApp.Services.Interfaces.ICustomerService customerService
+@inject NavigationManager NavigationManager
+@using BlazorApp.Models
+
+<CustomerForm Title="Novo Cliente" Customer="Customer" Save="SaveCustomer" Cancel="Cancel" />
+
+@code {
+    Customer Customer = new();
+    List<Customer> customers;
+
+    public async void SaveCustomer()
+    {
+        Customer.New();
+        customers.Add(Customer);
+        await customerService.SaveCustomers(customers);
+        NavigationManager.NavigateTo("/");
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        customers = await customerService.GetCustomersAsync();
+    }
+
+    void Cancel()
+    {
+        NavigationManager.NavigateTo("/");
+    }
+}
